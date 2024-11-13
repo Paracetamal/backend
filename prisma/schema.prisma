@@ -1,0 +1,58 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+
+  @@map("admin")
+}
+
+model Clients {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  cpf       String  @unique @db.VarChar(255)
+  telephone String  @db.VarChar(15)
+  address   String  @db.VarChar(255)
+  status    Boolean
+
+  order Order[]
+
+  @@map("clients")
+}
+
+model Order {
+  id           Int      @id @default(autoincrement())
+  datePurchase DateTime @default(now())
+  amount       Int
+  value        Float
+  open         Boolean
+
+  client_id  Int
+  product_id Int
+
+  client  Clients? @relation(fields: [client_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  product Product? @relation(fields: [product_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("order")
+}
+
+model Product {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique @db.VarChar(255)
+  price Decimal @db.Decimal(10, 2)
+
+  product_image_filename String @unique @db.VarChar(255)
+
+  Order Order[]
+
+  @@map("product")
+}
