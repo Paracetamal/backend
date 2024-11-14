@@ -33,6 +33,7 @@ async function registerClient(req, res) {
         cpf,
         telephone,
         address,
+        status: true
       }
     });
 

@@ -6,8 +6,6 @@ async function createProduct(req, res) {
     const { name, price: priceStg } = req.body;
     const image = req.file;
 
-    console.log(image)
-
     if (!name || !priceStg || !image) {
       throw new CustomError('Todos os dados devem ser enviados', 401)
     }
@@ -24,7 +22,7 @@ async function createProduct(req, res) {
       data: {
         name,
         price,
-        product_image_path: image.filename
+        product_image_filename: image.filename
       },
     });
 
